@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<title>School Dashboard Login</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#007bff">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Eczar Bold:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Khand:wght@600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Baloo Bhai 2', cursive;
+}
+
+/* Login Box */
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  width: 320px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.login-box h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+.login-box input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  background: linear-gradient(to right, #ff9a9e, #a1c4fd);
+  color: #000;
+}
+.login-box input::placeholder { color:#333; font-weight:normal; }
+.login-box button {
+  width: 95%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #a1c4fd, #ff9a9e);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s;
+}
+.login-box button:hover { transform: scale(1.05); }
+
+/* Dashboard */
+#dashboard {
+  display: none;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #b6c7d6 0%, #8b94c0 100%);
+  text-align: center;
+  padding-top: 30px;
+  position: relative;
+  overflow-x: hidden;
+  color: white;
+}
+
+/* School header */
+.school-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.school-logo {
+  height: 60px;
+  width: auto;
+}
+h1, h2, h3 {
+  margin: 5px 0;
+  position: relative;
+  z-index: 1;
+}
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: transparent;
+  margin-top: 10px;
+  height: 30px;
+}
+
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll 12s linear infinite;  /* adjust speed */
+  font-size: 22px;
+  color: #ea0c0c; /* faint golden */
+  font-weight: 600;
+  font-family: 'Khand', sans-serif;
+}
+
+@keyframes scroll {
+  from { transform: translateX(100%); }   /* start from right edge */
+  to { transform: translateX(-100%); }    /* end at left edge */
+}
+/* Photo Section */
+.photo-section {
+  width: 100%;
+  height: 40vh;  /* adjust 50–60vh to your liking */
+  background-image: url('https://github.com/prakashgawali2184-lgtm/Marklist/blob/main/school-photo.jpeg?raw=true');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 0;
+  margin-bottom: 150px; /* adds some space before gradient continues */
+}
+
+/* Floating Action Button (Hamburger) */
+.fab {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.fab:hover { transform: scale(1.1); box-shadow:0 8px 20px rgba(0,0,0,0.4); }
+
+/* Sidebar Menu */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, #4c80bc, #07477c);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+.sidebar a {
+  padding: 15px 20px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+  text-align:left;
+}
+.sidebar a:hover { background-color: rgba(255,255,255,0.2); }
+h1, h3 {
+  color: maroon;
+  font-family: 'Eczar', serif;
+  font-size: 40px;
+  font-weight: bold; /* Ensures Eczar Bold is applied */
+  text-align: center;
+}
+
+h2 {
+  font-family: 'Vesper Libre', cursive;
+  font-weight: 900; /* Heavy */
+  font-size: 20px;
+  color: darkblue;  /* keep your previous color */
+  text-align: center;
+}</style>
+</head>
+<body>
+
+<!-- Login Page -->
+<div id="loginPage" class="login-box">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- Dashboard Page -->
+<div id="dashboard">
+  <div class="school-header">
+    <img src="https://github.com/prakashgawali2184-lgtm/Marklist/blob/main/pvg1.png?raw=true" 
+         alt="School Logo" class="school-logo">
+    <h2>पुणे विद्यार्थी गृह संचलित</h2>
+  </div>
+  <h1>विद्याप्रशाला हायस्कूल व ज्युनि.कॉलेज, तळेगांव (अं.)</h1>
+  <h3>ता.जि.नाशिक</h3>
+
+  <!-- Marquee below school name -->
+  <div class="marquee-container">
+  <div class="marquee">
+    <span>Welcome to - विद्याप्रशाला हायस्कूल व ज्युनिअर कॉलेज, तळेगांव (अं.) ता.जि. नाशिक</span>
+    
+  </div>
+</div>
+   
+  <!-- Photo section -->
+  <div class="photo-section"></div>
+
+  <!-- Hamburger Button -->
+  <div class="fab" onclick="toggleNav()">☰</div>
+  
+  <!-- Sidebar Menu -->
+  <div id="mySidebar" class="sidebar">
+    <a href="#">Announcements</a>
+    <a href="#">Marks</a>
+    <a href="#">Settings</a>
+
+    <!-- My Links menu -->
+    <a href="javascript:void(0)" onclick="toggleLinks()">My Links ▼</a>
+    <div id="myLinksSubmenu" style="display:none; margin-left:20px;">
+      <a href="https://prakashgawali2184-lgtm.github.io/My-Marklist/" target="_blank">Marklist 1</a>
+      <a href="https://username.github.io/repository-name/marklist2.html" target="_blank">Marklist 2</a>
+      <a href="https://forms.gle/AraabsesWzm8vvN37" target="_blank">Scholarship</a>
+    </div>
+
+    <a href="#" onclick="logout()">Logout</a>
+  </div>
+</div>
+
+<script>
+  // Check session on page load
+  window.onload = function() {
+    if (sessionStorage.getItem("loggedIn") === "true") {
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+    }
+  };
+
+  function login() {
+    let user = document.getElementById("username").value.trim();
+    let pass = document.getElementById("password").value;
+    if (user && pass === "vpt@123") {
+      sessionStorage.setItem("loggedIn", "true");
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+    } else {
+      alert("Invalid Username or Password!");
+    }
+  }
+
+  function logout() {
+    sessionStorage.removeItem("loggedIn");
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("loginPage").style.display = "block";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    closeNav();
+  }
+
+  // Toggle My Links submenu
+  function toggleLinks() {
+    const submenu = document.getElementById("myLinksSubmenu");
+    if (submenu.style.display === "none" || submenu.style.display === "") {
+      submenu.style.display = "block";
+    } else {
+      submenu.style.display = "none";
+    }
+  }
+
+  // Sidebar toggle
+  function toggleNav() {
+    const sidebar = document.getElementById("mySidebar");
+    if (sidebar.style.width === "180px") {
+      closeNav();
+    } else {
+      openNav();
+    }
+  }
+
+  // Open Sidebar
+  function openNav() {
+    document.getElementById("mySidebar").style.width = "180px";
+    document.addEventListener("click", outsideClick);
+  }
+
+  // Close Sidebar
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.removeEventListener("click", outsideClick);
+  }
+
+  // Close when clicking outside
+  function outsideClick(e) {
+    const sidebar = document.getElementById("mySidebar");
+    const fab = document.querySelector(".fab");
+
+    if (!sidebar.contains(e.target) && !fab.contains(e.target)) {
+      closeNav();
+    }
+  }
+</script>
+</body>
+</html>
